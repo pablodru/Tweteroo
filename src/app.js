@@ -13,19 +13,28 @@ const allTweets =  [];
 app.post('/sign-up', (req, res) => {
     const { username, avatar } = req.body;
 
+    if((username.length===0 && typeof username !== 'string') && (avatar.length===0 && typeof avatar !== 'string')){
+        return res.status(400).send({message:"Todos os campos são obrigatórios!"})
+    }
+
     const body = { username, avatar };
     users.push(body);
-    res.status(200).send({message: 'OK'});
+    res.status(201).send({message: 'OK'});
 });
 
 app.post('/tweets', (req, res) => {
-    const { username, tweet } = req.body;
+    const { tweet } = req.body;
+    const { user } = req.headers;
 
-    if( !users.find(u => u.username === username) ){
+    if((user.length===0 && typeof user !== 'string') && (tweet.length===0 && typeof tweet !== 'string')){
+        return res.status(400).send({message:"Todos os campos são obrigatórios!"})
+    }
+
+    if( !users.find(u => u.username === user) ){
         return res.status(401).send({message: "Usuário não cadastrado!"});
     }
 
-    const body = { username, tweet };
+    const body = { user, tweet };
     allTweets.push(body);
     res.status(201).send({message: "OK"});
 });
@@ -47,6 +56,29 @@ app.get('/tweets', (req, res) => {
     })
 
     res.status(201).send(arrayTweets.slice(-10));
+})
+
+app.get('tweets/:username', (req,res) => {
+    const { username } = req.params;
+    const avatar = '';
+
+    const personTweets = allTweets.filter(tweet => {
+        if(tweet.username === username) return true;
+    });
+
+    if(personTweets.length===0) {
+        return res.status(200).send([])
+    }
+
+    users.forEach(user => {
+        if(user.username === username) avatar = user.avatar;
+    })
+
+    const response = personTweets.map(element => {
+        return {username, avatar, tweets:personTweets.tweet};
+    })
+
+    res.status(200).send(response);
 })
 
 const PORT = 5000;
