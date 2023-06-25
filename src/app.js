@@ -25,8 +25,10 @@ app.post('/sign-up', (req, res) => {
 app.post('/tweets', (req, res) => {
     const { tweet } = req.body;
     const { user } = req.headers;
+    console.log('Esse é o user: ', user);
+    console.log('Esse é o tweet: ', tweet);
 
-    if((user.length===0 && typeof user !== 'string') && (tweet.length===0 && typeof tweet !== 'string')){
+    if((user.length===0 && typeof user !== string) && (tweet.length===0 && typeof tweet !== string)){
         return res.status(400).send({message:"Todos os campos são obrigatórios!"})
     }
 
@@ -34,7 +36,7 @@ app.post('/tweets', (req, res) => {
         return res.status(401).send({message: "Usuário não cadastrado!"});
     }
 
-    const body = { user, tweet };
+    const body = { username: user, tweet };
     allTweets.push(body);
     res.status(201).send({message: "OK"});
 });
@@ -50,8 +52,8 @@ app.get('/tweets', (req, res) => {
                 avatar = user.avatar;
             }
         });
-        console.log(tweet);
         const body = {username: tweet.username, avatar, tweet: tweet.tweet};
+        console.log('body: ', body)
         arrayTweets.push(body);
     })
 
