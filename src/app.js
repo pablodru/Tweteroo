@@ -34,7 +34,7 @@ app.post('/tweets', (req, res) => {
     const { tweet } = req.body;
     const { user } = req.headers;
 
-    if(Object.keys(req.body).length!==2){
+    if(Object.keys(req.body).length!==1){
         return res.status(400).send({message:"Todos os campos são obrigatórios!"})
     }
 
@@ -52,7 +52,7 @@ app.post('/tweets', (req, res) => {
 });
 
 app.get('/tweets', (req, res) => {
-    
+
     const arrayTweets = []
 
     allTweets.forEach(tweet => {
