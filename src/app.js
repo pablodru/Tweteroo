@@ -13,7 +13,10 @@ const allTweets =  [];
 app.post('/sign-up', (req, res) => {
     const { username, avatar } = req.body;
 
-    if((username.length===0 && typeof username !== 'string') && (avatar.length===0 && typeof avatar !== 'string')){
+    console.log('Esse é o user: ', typeof username);
+    console.log('Esse é o username: ', avatar);
+
+    if((username.length===0 || typeof username !== 'string') || (avatar.length===0 || typeof avatar !== 'string')){
         return res.status(400).send({message:"Todos os campos são obrigatórios!"})
     }
 
@@ -25,10 +28,8 @@ app.post('/sign-up', (req, res) => {
 app.post('/tweets', (req, res) => {
     const { tweet } = req.body;
     const { user } = req.headers;
-    // console.log('Esse é o user: ', user);
-    // console.log('Esse é o tweet: ', tweet);
 
-    if((user.length===0 && typeof user !== string) && (tweet.length===0 && typeof tweet !== string)){
+    if((user.length===0 || typeof user !== 'string') || (tweet.length===0 || typeof tweet !== 'string')){
         return res.status(400).send({message:"Todos os campos são obrigatórios!"})
     }
 
