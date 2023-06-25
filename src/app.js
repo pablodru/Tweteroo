@@ -25,8 +25,8 @@ app.post('/sign-up', (req, res) => {
 app.post('/tweets', (req, res) => {
     const { tweet } = req.body;
     const { user } = req.headers;
-    console.log('Esse é o user: ', user);
-    console.log('Esse é o tweet: ', tweet);
+    // console.log('Esse é o user: ', user);
+    // console.log('Esse é o tweet: ', tweet);
 
     if((user.length===0 && typeof user !== string) && (tweet.length===0 && typeof tweet !== string)){
         return res.status(400).send({message:"Todos os campos são obrigatórios!"})
@@ -60,13 +60,15 @@ app.get('/tweets', (req, res) => {
     res.status(201).send(arrayTweets.slice(-10));
 })
 
-app.get('tweets/:username', (req,res) => {
+app.get('/tweets/:username', (req,res) => {
     const { username } = req.params;
-    const avatar = '';
+    //console.log(username);
+    let avatar = '';
 
     const personTweets = allTweets.filter(tweet => {
         if(tweet.username === username) return true;
     });
+    console.log(personTweets)
 
     if(personTweets.length===0) {
         return res.status(200).send([])
@@ -77,7 +79,7 @@ app.get('tweets/:username', (req,res) => {
     })
 
     const response = personTweets.map(element => {
-        return {username, avatar, tweets:personTweets.tweet};
+        return {username, avatar, tweets:element.tweet};
     })
 
     res.status(200).send(response);
