@@ -13,8 +13,13 @@ const allTweets =  [];
 app.post('/sign-up', (req, res) => {
     const { username, avatar } = req.body;
 
+    console.log(Object.keys(req.body))
+
     console.log('Esse é o user: ', typeof username);
     console.log('Esse é o username: ', avatar);
+    if(Object.keys(req.body).length!==2){
+        return res.status(400).send({message:"Todos os campos são obrigatórios!"})
+    }
 
     if((username.length===0 || typeof username !== 'string') || (avatar.length===0 || typeof avatar !== 'string')){
         return res.status(400).send({message:"Todos os campos são obrigatórios!"})
@@ -28,6 +33,10 @@ app.post('/sign-up', (req, res) => {
 app.post('/tweets', (req, res) => {
     const { tweet } = req.body;
     const { user } = req.headers;
+
+    if(Object.keys(req.body).length!==2){
+        return res.status(400).send({message:"Todos os campos são obrigatórios!"})
+    }
 
     if((user.length===0 || typeof user !== 'string') || (tweet.length===0 || typeof tweet !== 'string')){
         return res.status(400).send({message:"Todos os campos são obrigatórios!"})
@@ -80,7 +89,7 @@ app.get('/tweets/:username', (req,res) => {
     })
 
     const response = personTweets.map(element => {
-        return {username, avatar, tweets:element.tweet};
+        return {username, avatar, tweet:element.tweet};
     })
 
     res.status(200).send(response);
