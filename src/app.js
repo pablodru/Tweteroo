@@ -53,6 +53,8 @@ app.post('/tweets', (req, res) => {
 
 app.get('/tweets', (req, res) => {
 
+    const { page } = req.query;
+
     const arrayTweets = []
 
     allTweets.forEach(tweet => {
@@ -65,7 +67,16 @@ app.get('/tweets', (req, res) => {
         const body = {username: tweet.username, avatar, tweet: tweet.tweet};
         console.log('body: ', body)
         arrayTweets.push(body);
-    })
+    });
+
+    if( page ){
+        if( page < 1) return res.status(400).send({message: "Informe uma página válida!"});
+        else {
+            const start = arrayTweets.length - ( page * 10);
+            const end = arrayTweets.length - ((page - 1) * 10);
+            return res.status(201).send(arrayTweets.slice(start, end));
+        }
+    }
 
     res.status(201).send(arrayTweets.slice(-10));
 })
